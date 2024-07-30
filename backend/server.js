@@ -5,7 +5,7 @@ const NodeCache = require('node-cache');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const NEWS_API_KEY = 'your_news_api_key_here';
+const NEWS_API_KEY = 'e51cd847e41e4bccbade9e2e00ba6312';
 
 // Create a new cache with a default TTL of 24 hours (in seconds)
 const cache = new NodeCache({ stdTTL: 24 * 60 * 60 });
