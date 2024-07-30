@@ -66,8 +66,8 @@ function App() {
                   <strong>Date:</strong> {news.publishDate}
                 </CardText>
                 <CardText><strong>Brief:</strong> {news.brief}</CardText>
-                <CardText><strong>Full Content:</strong></CardText>
-                <div dangerouslySetInnerHTML={{ __html: news.fullContent }} />
+                {/* <CardText><strong>Full Content:</strong></CardText>
+                <div dangerouslySetInnerHTML={{ __html: news.fullContent }} /> */}
               </CardBody>
             </Card>
           )}

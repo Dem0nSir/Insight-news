@@ -22,7 +22,7 @@ app.get('/scrape', async (req, res) => {
       const image = document.querySelector('meta[property="og:image"]')?.content || '';
       const articleText = document.querySelector('article')?.innerText || document.body.innerText || '';
       const brief = articleText.split('.').slice(0, 2).join('. ') + '.';
-      const fullContent = document.documentElement.innerHTML;
+      // const fullContent = document.documentElement.innerHTML;
 
       return { title, publishDate, image, articleText, brief, fullContent };
     });
