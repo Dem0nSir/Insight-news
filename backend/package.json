@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "natural": "^7.1.0",
+    "node-cache": "^5.1.2",
     "puppeteer": "^22.14.0"
   }
 }

@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Col, Container, Row, Card, CardImg, CardBody, CardTitle, CardText } from 'react-bootstrap';
+import { Col, Container, Row, Card, CardImg, CardBody, CardTitle, CardText, Button } from 'react-bootstrap';
 import { fetchNews } from './api/newService';
 
 function App() {
   const [news, setNews] = useState([]);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
 
   const handleFetchNews = async () => {
     setError('');
     setIsLoading(true);
     try {
       const data = await fetchNews();
-      console.log('Fetched data:', data);
       setNews(data.articles || []);
+      setLastUpdated(new Date());
     } catch (error) {
-      console.error('Error in handleFetchNews:', error); 
+      console.error('Error in handleFetchNews:', error);
       setError(`Failed to fetch news: ${error.message}`);
     } finally {
       setIsLoading(false);
@@ -27,11 +28,17 @@ function App() {
     handleFetchNews();
   }, []);
 
-  console.log('Current state:', { news, error, isLoading });
-
   return (
     <Container className="py-5">
       <h1 className="text-center mb-4">Top Business News</h1>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <Button onClick={handleFetchNews} disabled={isLoading}>
+          {isLoading ? 'Refreshing...' : 'Refresh News'}
+        </Button>
+        {lastUpdated && (
+          <p className="mb-0">Last updated: {lastUpdated.toLocaleString()}</p>
+        )}
+      </div>
       {isLoading ? (
         <p className="text-center">Loading...</p>
       ) : (
