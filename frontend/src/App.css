@@ -37,8 +37,22 @@
   }
 }
 .App-feedpage {
-  position:absolute;
+  position: absolute;
 }
-.App-text-center mb-4{
+.App-text-center mb-4 {
   align-items: center;
+}
+
+.form-control {
+  width: 20%;
+}
+.card-body {
+  background-color: #f0f4f9;
+}
+.arrow {
+  background-image: url(./assets/header-arr.png);
+  background-repeat: no-repeat;
+  background-position: right 1.2rem top 50%;
+  appearance: none;
+  background-size: 0.75rem auto;
 }

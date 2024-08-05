@@ -9,13 +9,17 @@ const Sidebar = () => {
 
   return (
     <div className='sidebar'>
-      <div className="top"> 
+      <div className="top "> 
+        <div className="d-flex justify-content-center">
         <img onClick={() => setExtended(prev => !prev)} className="menu" src={assets.menu_icon} alt="menu icon" />
-        <div className="new-chat">
-          <img src={assets.plus_icon} alt="plus icon" />
-          {extended ? <p>Search</p> : null}
         </div>
-        {extended && (
+        <div className="new-chat">
+          <div className="black d-flex align-items-center justify-content-between gap-3">
+          <img src={assets.plus_icon} alt="plus icon" />
+          {extended ? <p className='mb-0'>Search</p> : null}
+          </div>
+        </div>
+        {/* {extended && (
           <div className="recent">
             <p className="recent-title"></p>
             <Dropdown className="recent-entry">
@@ -32,20 +36,20 @@ const Sidebar = () => {
               </Dropdown.Menu>
             </Dropdown>
           </div>
-        )}
+        )} */}
       </div>
-      <div className="bottom">
+      <div className="bottom mb-3">
         <div className="bottom-item recent-entry">
           <img src={assets.question_icon} alt="question icon" />
-          {extended ? <p>About Us</p> : null}
+          {extended ? <p className='mb-0'>About Us</p> : null}
         </div>
         <div className="bottom-item recent-entry">
           <img src={assets.history_icon} alt="history icon" />
-          {extended ? <p>Activity</p> : null}
+          {extended ? <p className='mb-0'>Activity</p> : null}
         </div>
         <div className="bottom-item recent-entry">
           <img src={assets.setting_icon} alt="settings icon" />
-          {extended ? <p>Settings</p> : null}
+          {extended ? <p className='mb-0'>Settings</p> : null}
         </div> 
       </div>
     </div>
