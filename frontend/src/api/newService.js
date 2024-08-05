@@ -18,7 +18,11 @@ import { db } from "../services/firebaseF";
 import { doc, getDoc } from 'firebase/firestore';
 
 export const fetchNews = async () => {
-  const newsDoc = doc(db, 'dailyNews', '2024-08-04'); 
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+
+  const newsDoc = doc(db, 'dailyNews', formattedDate);
+  
   const docSnap = await getDoc(newsDoc);
   if (docSnap.exists()) {
     return docSnap.data();
