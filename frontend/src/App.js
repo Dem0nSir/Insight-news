@@ -128,6 +128,7 @@
 
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Col, Container, Row, Card, Button, Form } from 'react-bootstrap';
 import { fetchNews } from './api/newService';
 import Sidebar from './components/Sidebar/Sidebar';
@@ -173,13 +174,21 @@ function App() {
         </Col>
         <Col md={9} className='pt-5'>
           <div className="feedpage">
-            <div className="text-center mb-4">
-              <h1>Top News</h1>
+            <div className="text-center mb-4 mt-3">
+              <h1>Insight News</h1>
             </div>
             <div className="d-flex justify-content-between align-items-center mb-4">
-              <Button onClick={handleFetchNews} disabled={isLoading}>
-                {isLoading ? 'Refreshing...' : 'Refresh News'}
-              </Button>
+               <Button onClick={handleFetchNews} disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                  <i className="bi bi-arrow-clockwise"></i> Refreshing...
+                  </>
+                  ) : (
+                  <>
+                  <i className="bi bi-arrow-clockwise"></i> Refresh
+                  </>
+                )}
+                </Button>
               {lastUpdated && (
                 <p className="mb-0">Last updated: {lastUpdated.toLocaleString()}</p>
               )}
@@ -206,7 +215,7 @@ function App() {
                 {Object.entries(news).map(([category, articles]) => (
                   (selectedCategory === '' || selectedCategory === category) && (
                     <div key={category}>
-                      <h2>{category.charAt(0).toUpperCase() + category.slice(1)} News</h2>
+                      <h2 className="text-center mb-3">{category.charAt(0).toUpperCase() + category.slice(1)} News</h2>
                       {articles.map((article, index) => (
                         <Card key={index} className="mb-4">
                           {article.urlToImage && (
