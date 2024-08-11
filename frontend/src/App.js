@@ -132,6 +132,7 @@ import { Col, Container, Row, Card, Button, Form } from 'react-bootstrap';
 import { fetchNews } from './api/newService';
 import Sidebar from './components/Sidebar/Sidebar';
 import Navbar from './components/Navbar/Navbar';
+import './App.css';
 
 function App() {
   const [news, setNews] = useState({});
@@ -165,12 +166,12 @@ function App() {
 
   return (
     <Container fluid className="py-5">
-      <Row>
+      <Row >
         <Navbar />
-        <Col md={3}>
+        <Col md={2} className="p-0">
           <Sidebar />
         </Col>
-        <Col md={9}>
+        <Col md={9} className='pt-5'>
           <div className="feedpage">
             <div className="text-center mb-4">
               <h1>Top News</h1>
@@ -184,9 +185,9 @@ function App() {
               )}
             </div>
             <Form.Group controlId="categorySelect" className="mb-4">
-              <Form.Label>Select Category</Form.Label>
-              <Form.Control as="select" value={selectedCategory} onChange={handleCategoryChange}>
-                <option value="">All</option>
+              <Form.Label>Select Category:</Form.Label>
+              <Form.Control as="select" className="arrow" value={selectedCategory} onChange={handleCategoryChange}>
+                <option value="">All categories</option>
                 {Object.keys(news).map((category) => (
                   <option key={category} value={category}>
                     {category.charAt(0).toUpperCase() + category.slice(1)}
