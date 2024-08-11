@@ -56,3 +56,6 @@
   appearance: none;
   background-size: 0.75rem auto;
 }
+body {
+  font-family: "Poppins", sans-serif;
+}
