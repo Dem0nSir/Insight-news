@@ -13,11 +13,9 @@
 // };
 
 // frontend/src/api/newsService.js
-import axios from 'axios';
+
 import { db } from "../services/firebaseF";
 import { doc, getDoc } from 'firebase/firestore';
-
-const API_BASE_URL = 'http://localhost:5000';
 
 export const fetchNews = async () => {
   const today = new Date();
@@ -30,17 +28,5 @@ export const fetchNews = async () => {
     return docSnap.data();
   } else {
     throw new Error('No such document!');
-  }
-};
-
-export const searchNews = async (searchQuery) => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/search`, {
-      params: { q: searchQuery }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error searching news:', error);
-    throw error;
   }
 };
