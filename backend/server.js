@@ -67,12 +67,33 @@ const NEWS_API_KEY = 'e51cd847e41e4bccbade9e2e00ba6312';
 
 const db = admin.firestore();
 
+// async function fetchNewsFromAPI(category) {
+//   try {
+//     const response = await axios.get('https://newsapi.org/v2/top-headlines', {
+//       params: {
+//         country: 'us',
+//         category: category,
+//         apiKey: NEWS_API_KEY
+//       }
+//     });
+//     return response.data.articles;
+//   } catch (error) {
+//     console.error(`Error fetching ${category} news:`, error);
+//     return [];
+//   }
+// }
+
 async function fetchNewsFromAPI(category) {
+  const today = new Date().toISOString().split('T')[0];
   try {
     const response = await axios.get('https://newsapi.org/v2/top-headlines', {
       params: {
-        country: 'us',
+        country: 'us', 
         category: category,
+        from: today,
+        to: today,
+        sortBy: 'popularity',
+        language: 'en',
         apiKey: NEWS_API_KEY
       }
     });
@@ -82,6 +103,26 @@ async function fetchNewsFromAPI(category) {
     return [];
   }
 }
+
+// async function fetchAndSaveAllNews() {
+//   const categories = ['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology'];
+//   const allNews = {};
+
+//   for (const category of categories) {
+//     allNews[category] = await fetchNewsFromAPI(category);
+//   }
+
+//   const today = new Date().toISOString().split('T')[0];
+
+//   try {
+//     await db.collection('dailyNews').doc(today).set(allNews);
+//     console.log(`News for ${today} saved successfully to Firestore`);
+//   } catch (error) {
+//     console.error('Error saving news to Firestore:', error);
+//   }
+
+//   return allNews;
+// }
 
 async function fetchAndSaveAllNews() {
   const categories = ['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology'];
@@ -150,6 +191,26 @@ app.get('/news', async (req, res) => {
     const news = await getTodaysNews();
     res.json(news);
   } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch news' });
+  }
+});
+
+app.get('/search', async (req, res) => {
+  const { q } = req.query;
+  const today = new Date().toISOString().split('T')[0];
+
+  try {
+    const response = await axios.get('https://newsapi.org/v2/everything', {
+      params: {
+        q: q || 'general',
+        from: today,
+        sortBy: 'publishedAt',
+        apiKey: NEWS_API_KEY
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching news:', error);
     res.status(500).json({ error: 'Failed to fetch news' });
   }
 });
