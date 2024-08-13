@@ -211,9 +211,9 @@ function App() {
     <Container fluid className="py-5">
       <Row>
         <Navbar />
-        <Col md={2} className="p-0">
+        {/* <Col md={2} className="p-0">
           <Sidebar />
-        </Col>
+        </Col> */}
         <Col md={9} className="pt-5">
           <div className="feedpage">
             <div className="text-center mb-4 mt-3">
@@ -310,7 +310,7 @@ function App() {
                   </div>
                 ) : (
                   <div>
-                    <h1 className="mb-4">Select a Category</h1>
+                    <h2 className="mb-4 mt-3">Select a Category</h2>
                     <p>
                       Please choose a category from the dropdown menu above to
                       view news articles.
