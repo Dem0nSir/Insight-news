@@ -1,6 +1,6 @@
 # Insight
 
-Welcome to the Insight project! This application is being developed using **React**, **Bootstrap**, and **MySQL**. INsight is designed to provide an automated news delivery experience, bringing the latest news and updates to users in a seamless and efficient manner.
+Welcome to the Insight project! This application is being developed using **React**, **Bootstrap**, **Node** and **Firebase**. INsight is designed to provide an automated news delivery experience, bringing the latest news and updates to users in a seamless and efficient manner.
 
 ## Project Description
 
@@ -17,8 +17,8 @@ The following technologies are being used to develop INsight:
 
 - **React:** A JavaScript library for building user interfaces, providing a dynamic and responsive user experience.
 - **Bootstrap:** A front-end framework for creating responsive and mobile-first websites, ensuring a consistent look and feel across devices.
-- **MySQL:** A relational database management system, used for storing and managing news data efficiently.
-
+- **Node:** A runtime environment that allows you to run JavaScript code on the server side, outside of a web browser. 
+- **Firebase:** A platform developed by Google that provides a variety of tools and services to help developers build and manage web and mobile applications.
 ## Getting Started
 
 To get started with the Insight project, follow these steps:
