@@ -138,7 +138,7 @@ const NewsComponent = () => {
   const [categorizedNews, setCategorizedNews] = useState({});
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-
+  const [isSearched, setIsSearched] = useState(false);
   useEffect(() => {
     fetchCategorizedNews()
       .then(async (data) => {
@@ -149,6 +149,8 @@ const NewsComponent = () => {
   }, []);
 
   const handleSearch = async () => {
+    setIsSearched(true);
+
     if (!searchQuery.trim()) {
       // If search query is empty or only contains whitespace
       setSearchResults([]);
@@ -247,16 +249,22 @@ const NewsComponent = () => {
         <button className="btn btn-primary" onClick={handleSearch}>Search</button>
       </div>
 
-      {searchResults.length > 0 && (
+      {isSearched && (
         <div className="mb-5">
           <h2 className="mb-3">Search Results</h2>
-          <div className="row">
-            {searchResults.map((article, index) => (
-              <React.Fragment key={index}>
-                {renderNewsCard(article)}
-              </React.Fragment>
-            ))}
-          </div>
+          {searchResults.length > 0 ? (
+            <div className="row">
+              {searchResults.map((article, index) => (
+                <React.Fragment key={index}>
+                  {renderNewsCard(article)}
+                </React.Fragment>
+              ))}
+            </div>
+          ) : (
+            <div className="alert alert-info" role="alert">
+              No content matches your search query. Please try a different search term.
+            </div>
+          )}
         </div>
       )}
 
