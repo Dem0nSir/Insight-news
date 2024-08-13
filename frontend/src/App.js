@@ -124,11 +124,10 @@
 // }
 
 // export default App;
-
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { Col, Container, Row, Card, Button, Form } from "react-bootstrap";
+import { Col, Container, Row, Card, Button, Form, Modal } from "react-bootstrap"; // Added Modal here
 import { fetchNews } from "./api/newService";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Navbar from "./components/Navbar/Navbar";
@@ -141,6 +140,7 @@ function App() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
+  const [showWelcomePopup, setShowWelcomePopup] = useState(true); // State to manage popup visibility
 
   const handleFetchNews = async () => {
     setError("");
@@ -211,9 +211,9 @@ function App() {
     <Container fluid className="py-5">
       <Row>
         <Navbar />
-        {/* <Col md={2} className="p-0">
+        <Col md={2} className="p-0">
           <Sidebar />
-        </Col> */}
+        </Col>
         <Col md={9} className="pt-5">
           <div className="feedpage">
             <div className="text-center mb-4 mt-3">
@@ -259,35 +259,6 @@ function App() {
                 {Object.keys(news).length === 0 && !error && (
                   <p className="text-center">No news articles found.</p>
                 )}
-                {/* {Object.entries(news).map(([category, articles]) => (
-                  (selectedCategory === '' || selectedCategory === category) && (
-                    <div key={category}>
-                      <h2 className="text-center mb-3">{category.charAt(0).toUpperCase() + category.slice(1)} News</h2>
-                      {articles.map((article, index) => (
-                        <Card key={index} className="mb-4">
-                          {article.urlToImage && (
-                            <Card.Img variant="top" src={article.urlToImage} alt={article.title} />
-                          )}
-                          <Card.Body>
-                            <Card.Title>{article.title}</Card.Title>
-                            <Card.Text>
-                              <strong>Author:</strong> {article.author || 'Unknown'}
-                            </Card.Text>
-                            <Card.Text>
-                              <strong>Date:</strong> {new Date(article.publishedAt).toLocaleDateString()}
-                            </Card.Text>
-                            <Card.Text>{article.description}</Card.Text>
-                            <div className="d-flex justify-content-between mb-3">
-
-                          
-                            </div>
-                          </Card.Body>
-                        </Card>
-                      ))}
-                    </div>
-                  )
-                ))} */}
-
                 {selectedCategory ? (
                   <div>
                     <h1 className="mb-4">
@@ -310,7 +281,7 @@ function App() {
                   </div>
                 ) : (
                   <div>
-                    <h2 className="mb-4 mt-3">Select a Category</h2>
+                    <h1 className="mb-4">Select a Category</h1>
                     <p>
                       Please choose a category from the dropdown menu above to
                       view news articles.
@@ -322,6 +293,21 @@ function App() {
           </div>
         </Col>
       </Row>
+
+      {/* Welcome Popup */}
+      <Modal show={showWelcomePopup} onHide={() => setShowWelcomePopup(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Welcome to Insight News</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Welcome! Stay informed with the latest news updates. Use the category selector to filter news articles based on your interests.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={() => setShowWelcomePopup(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 }
