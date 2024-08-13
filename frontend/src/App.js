@@ -211,9 +211,9 @@ function App() {
     <Container fluid className="py-5">
       <Row>
         <Navbar />
-        <Col md={2} className="p-0">
-          <Sidebar />
-        </Col>
+        {/* <Col md={2} className="p-0"> */}
+          {/* <Sidebar />
+        </Col> */}
         <Col md={9} className="pt-5">
           <div className="feedpage">
             <div className="text-center mb-4 mt-3">
