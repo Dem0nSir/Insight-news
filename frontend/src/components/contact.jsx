@@ -1,46 +1,74 @@
 import React from 'react';
 import { useForm, ValidationError } from '@formspree/react';
+import { Form, Button, Container, Alert } from 'react-bootstrap';
 
 function ContactForm() {
   const [state, handleSubmit] = useForm("xanwjklo");
+  
   if (state.succeeded) {
-      return <p>Thanks for joining!</p>;
+    return (
+      <Container className="mt-5">
+        <Alert variant="success">Thanks for joining!</Alert>
+      </Container>
+    );
   }
+  
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="email">
-        Email Address
-      </label>
-      <input
-        id="email"
-        type="email" 
-        name="email"
-      />
-      <ValidationError 
-        prefix="Email" 
-        field="email"
-        errors={state.errors}
-      />
-      <textarea
-        id="message"
-        name="message"
-      />
-      <ValidationError 
-        prefix="Message" 
-        field="message"
-        errors={state.errors}
-      />
-      <button type="submit" disabled={state.submitting}>
-        Submit
-      </button>
-    </form>
+    <Container className="">
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3" controlId="email">
+          <Form.Label>Email Address</Form.Label>
+          <Form.Control
+            type="email" 
+            name="email"
+            placeholder="Enter your email"
+            className='w-100'
+          />
+          <ValidationError 
+            prefix="Email" 
+            field="email"
+            errors={state.errors}
+            render={({ messages }) =>
+              messages &&
+              Object.entries(messages).map(([type, message]) => (
+                <Form.Text key={type} className="text-danger">
+                  {message}
+                </Form.Text>
+              ))
+            }
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="message">
+          <Form.Label>Message</Form.Label>
+          <Form.Control
+            as="textarea"
+            name="message"
+                  className='w-100'
+            rows={4}
+            placeholder="Enter your message"
+          />
+          <ValidationError 
+            prefix="Message" 
+            field="message"
+            errors={state.errors}
+            render={({ messages }) =>
+              messages &&
+              Object.entries(messages).map(([type, message]) => (
+                <Form.Text key={type} className="text-danger">
+                  {message}
+                </Form.Text>
+              ))
+            }
+          />
+        </Form.Group>
+
+        <Button variant="primary" type="submit" disabled={state.submitting}>
+          Submit
+        </Button>
+      </Form>
+    </Container>
   );
 }
 
-function App() {
-  return (
-    <ContactForm />
-  );
-}
-
-export default App;
+export default ContactForm;
