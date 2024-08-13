@@ -134,6 +134,7 @@ import { fetchNews } from './api/newService';
 import Sidebar from './components/Sidebar/Sidebar';
 import Navbar from './components/Navbar/Navbar';
 import './App.css';
+import NewsComponent from './components/Search';
 
 function App() {
   const [news, setNews] = useState({});
@@ -177,6 +178,7 @@ function App() {
             <div className="text-center mb-4 mt-3">
               <h1>Insight News</h1>
             </div>
+            <NewsComponent/>
             <div className="d-flex justify-content-between align-items-center mb-4">
                <Button onClick={handleFetchNews} disabled={isLoading}>
                 {isLoading ? (

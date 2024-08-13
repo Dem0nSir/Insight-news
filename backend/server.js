@@ -59,8 +59,11 @@
 const express = require('express');
 const admin = require('./firebaseAdmin');
 const axios = require('axios');
-
+const cors = require('cors');
 const app = express();
+
+app.use(cors());
+
 const PORT = process.env.PORT || 5000;
 const NEWS_API_KEY = 'e51cd847e41e4bccbade9e2e00ba6312';
 
@@ -154,6 +157,27 @@ app.get('/news', async (req, res) => {
   }
 });
 
+app.get('/search', async (req, res) => {
+  const { q } = req.query;
+  try {
+    const response = await axios.get('https://newsapi.org/v2/everything', {
+      params: {
+        q: q,
+        apiKey: NEWS_API_KEY,
+        language: 'en',
+        // sortBy: 'publishedAt' 
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error searching news:', error);
+    res.status(500).json({ error: 'An error occurred while searching for news' });
+  }
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+// ZLZAHmUvEVJJCAICEcCmwTJiaEjOxVQnDSvOiTsGFwFMZGFKCt
