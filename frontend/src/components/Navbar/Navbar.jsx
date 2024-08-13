@@ -15,9 +15,9 @@ const Navbar = () => {
             />
             Insights
       </div>
-      <div className="navbar-center">
+      {/* <div className="navbar-center">
         <input type="text" placeholder="Search..." className="navbar-search" />
-      </div>
+      </div> */}
       <div className="navbar-right">
         {/* <a href="home" className="navbar-link">Home</a>
         <a href="popular" className="navbar-link">Popular</a>

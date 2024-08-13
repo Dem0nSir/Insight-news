@@ -29,7 +29,7 @@
 // async function fetchNewsFromAPI() {
 //   const response = await axios.get('https://newsapi.org/v2/everything', {
 //     params: {
-//       q: 'bitcoin', 
+//       q: 'bitcoin',
 //       apiKey: NEWS_API_KEY
 //     }
 //   });
@@ -56,28 +56,29 @@
 //   console.log(`Server is running on http://localhost:${PORT}`);
 // });
 
-const express = require('express');
-const admin = require('./firebaseAdmin');
-const axios = require('axios');
-const cors = require('cors');
+const express = require("express");
+const admin = require("./firebaseAdmin");
+const axios = require("axios");
+const cors = require("cors");
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
-const NEWS_API_KEY = 'e51cd847e41e4bccbade9e2e00ba6312';
-
+const NEWS_API_KEY = "6836b4f8d63a40cc9e90233caf2d798b";
+const API_KEY = "ZLZAHmUvEVJJCAICEcCmwTJiaEjOxVQnDSvOiTsGFwFMZGFKCt";
 
 const db = admin.firestore();
 
 async function fetchNewsFromAPI(category) {
   try {
-    const response = await axios.get('https://newsapi.org/v2/top-headlines', {
+    const response = await axios.get("https://newsapi.org/v2/top-headlines", {
       params: {
-        country: 'us',
+        country: "us",
         category: category,
-        apiKey: NEWS_API_KEY
-      }
+        apiKey: NEWS_API_KEY,
+      },
     });
     return response.data.articles;
   } catch (error) {
@@ -87,40 +88,48 @@ async function fetchNewsFromAPI(category) {
 }
 
 async function fetchAndSaveAllNews() {
-  const categories = ['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology'];
+  const categories = [
+    "business",
+    "entertainment",
+    "general",
+    "health",
+    "science",
+    "sports",
+    "technology",
+  ];
   const allNews = {};
 
   for (const category of categories) {
     allNews[category] = await fetchNewsFromAPI(category);
   }
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
 
   try {
-    await db.collection('dailyNews').doc(today).set(allNews);
+    await db.collection("dailyNews").doc(today).set(allNews);
     console.log(`News for ${today} saved successfully to Firestore`);
   } catch (error) {
-    console.error('Error saving news to Firestore:', error);
+    console.error("Error saving news to Firestore:", error);
   }
 
   return allNews;
 }
 
 async function getTodaysNews() {
-  const today = new Date().toISOString().split('T')[0];
-  const docRef = db.collection('dailyNews').doc(today);
+  const today = new Date().toISOString().split("T")[0];
+  const docRef = db.collection("dailyNews").doc(today);
 
   try {
     const doc = await docRef.get();
     if (doc.exists) {
-      console.log('Returning news from Firestore');
+      console.log("Returning news from Firestore");
       return doc.data();
     } else {
-      console.log('Fetching and saving new news');
+      console.log("Fetching and saving new news");
       return await fetchAndSaveAllNews();
     }
   } catch (error) {
-    console.error('Error getting news:', error);
+    console.error("Error getting news:", error);
     throw error;
   }
 }
@@ -135,11 +144,25 @@ let lastFetchDate = new Date(0); // Initialize with a past date
 
 // Fetch news once a day
 async function fetchNewsDaily() {
-  if (isNewDay(lastFetchDate)) {
-    console.log('Fetching news for the new day');
-    await fetchAndSaveAllNews();
-    lastFetchDate = new Date();
+  const today = new Date().toISOString().split("T")[0];
+  const docRef = db.collection("dailyNews").doc(today);
+
+  try {
+    const doc = await docRef.get();
+    if (doc.exists) {
+      console.log(
+        `News for ${today} already exists in Firestore. Skipping fetch.`
+      );
+    } else {
+      console.log("Fetching news for the new day");
+      await fetchAndSaveAllNews();
+    }
+  } catch (error) {
+    console.error("Error checking or fetching news:", error);
   }
+
+  // Update lastFetchDate to prevent multiple fetches within the same day
+  lastFetchDate = new Date();
 }
 
 // Schedule the daily fetch
@@ -148,33 +171,63 @@ setInterval(fetchNewsDaily, 1000 * 60 * 60); // Check every hour
 // Fetch news immediately when the server starts
 fetchNewsDaily();
 
-app.get('/news', async (req, res) => {
+app.get("/news", async (req, res) => {
   try {
     const news = await getTodaysNews();
     res.json(news);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch news' });
+    res.status(500).json({ error: "Failed to fetch news" });
   }
 });
 
-app.get('/search', async (req, res) => {
+app.get("/search", async (req, res) => {
   const { q } = req.query;
   try {
-    const response = await axios.get('https://newsapi.org/v2/everything', {
+    const response = await axios.get("https://newsapi.org/v2/everything", {
       params: {
         q: q,
         apiKey: NEWS_API_KEY,
-        language: 'en',
-        // sortBy: 'publishedAt' 
-      }
+        language: "en",
+        // sortBy: 'publishedAt'
+      },
     });
     res.json(response.data);
   } catch (error) {
-    console.error('Error searching news:', error);
-    res.status(500).json({ error: 'An error occurred while searching for news' });
+    console.error("Error searching news:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while searching for news" });
   }
 });
 
+app.post("/sentiment", async (req, res) => {
+  const { text } = req.body;
+
+  if (!text) {
+    return res.status(400).json({ error: "Text is required" });
+  }
+
+  try {
+    const response = await axios.post(
+      "https://portal.ayfie.com/api/sentiment",
+      {
+        language: "en",
+        text: text,
+      },
+      {
+        headers: {
+          "X-API-KEY": API_KEY, // Include API key in headers
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    res.json({ sentiment: response.data.result });
+  } catch (error) {
+    console.error("Error fetching sentiment:", error);
+    res.status(500).json({ error: "Failed to analyze sentiment" });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

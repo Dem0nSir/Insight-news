@@ -60,7 +60,7 @@
 //   };
 
 //   return (
-    
+
 //     <Container fluid className="py-5">
 //       <Row>
 //       <Navbar/>
@@ -114,7 +114,7 @@
 //                 </Card>
 //               ))}
 //             </div>
-            
+
 //           )}
 //           </div>
 //         </Col>
@@ -125,33 +125,32 @@
 
 // export default App;
 
-
-import React, { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import { Col, Container, Row, Card, Button, Form } from 'react-bootstrap';
-import { fetchNews } from './api/newService';
-import Sidebar from './components/Sidebar/Sidebar';
-import Navbar from './components/Navbar/Navbar';
-import './App.css';
-import NewsComponent from './components/Search';
+import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import { Col, Container, Row, Card, Button, Form } from "react-bootstrap";
+import { fetchNews } from "./api/newService";
+import Sidebar from "./components/Sidebar/Sidebar";
+import Navbar from "./components/Navbar/Navbar";
+import "./App.css";
+import NewsComponent from "./components/Search";
 
 function App() {
   const [news, setNews] = useState({});
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [error, setError] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
 
   const handleFetchNews = async () => {
-    setError('');
+    setError("");
     setIsLoading(true);
     try {
       const data = await fetchNews();
       setNews(data);
       setLastUpdated(new Date());
     } catch (error) {
-      console.error('Error in handleFetchNews:', error);
+      console.error("Error in handleFetchNews:", error);
       setError(`Failed to fetch news: ${error.message}`);
     } finally {
       setIsLoading(false);
@@ -163,49 +162,95 @@ function App() {
   }, []);
 
   const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
+    setSelectedCategory(
+      event.target.value === "All categories" ? "" : event.target.value
+    );
   };
+
+  const renderNewsCard = (article) => (
+    <div className="col-md-4 mb-4">
+      <div className="card h-100">
+        {article.urlToImage && (
+          <img
+            src={article.urlToImage}
+            className="card-img-top"
+            alt={article.title}
+          />
+        )}
+        <div className="card-body">
+          <h5 className="card-title">{article.title}</h5>
+          <p className="card-text">
+            {article.description || "No description available"}
+          </p>
+          <p className="card-text">
+            <small className="text-muted">
+              {article.author ? `By ${article.author}` : "Unknown author"} |
+              {new Date(article.publishedAt).toLocaleDateString()}
+            </small>
+          </p>
+          <p className="card-text">
+            <strong>Sentiment: </strong>
+            {article.sentiment}
+          </p>
+        </div>
+        <div className="card-footer">
+          <a
+            href={article.url}
+            className="btn btn-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Read More
+          </a>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <Container fluid className="py-5">
-      <Row >
+      <Row>
         <Navbar />
         <Col md={2} className="p-0">
           <Sidebar />
         </Col>
-        <Col md={9} className='pt-5'>
+        <Col md={9} className="pt-5">
           <div className="feedpage">
             <div className="text-center mb-4 mt-3">
               <h1>Insight News</h1>
             </div>
-            <NewsComponent/>
+            <NewsComponent />
             <div className="d-flex justify-content-between align-items-center mb-4">
-               <Button onClick={handleFetchNews} disabled={isLoading}>
+              <Button onClick={handleFetchNews} disabled={isLoading}>
                 {isLoading ? (
                   <>
-                  <i className="bi bi-arrow-clockwise"></i> Refreshing...
+                    <i className="bi bi-arrow-clockwise"></i> Refreshing...
                   </>
-                  ) : (
+                ) : (
                   <>
-                  <i className="bi bi-arrow-clockwise"></i> Refresh
+                    <i className="bi bi-arrow-clockwise"></i> Refresh
                   </>
                 )}
-                </Button>
+              </Button>
               {lastUpdated && (
-                <p className="mb-0">Last updated: {lastUpdated.toLocaleString()}</p>
+                <p className="mb-0">
+                  Last updated: {lastUpdated.toLocaleString()}
+                </p>
               )}
             </div>
-            <Form.Group controlId="categorySelect" className="mb-4">
-              <Form.Label>Select Category:</Form.Label>
-              <Form.Control as="select" className="arrow" value={selectedCategory} onChange={handleCategoryChange}>
-                <option value="">All categories</option>
-                {Object.keys(news).map((category) => (
-                  <option key={category} value={category}>
-                    {category.charAt(0).toUpperCase() + category.slice(1)}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
+            <Form.Control
+              as="select"
+              className="arrow"
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+            >
+              <option value="">All categories</option>
+              {Object.keys(news).map((category) => (
+                <option key={category} value={category}>
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </option>
+              ))}
+            </Form.Control>
             {isLoading ? (
               <p className="text-center">Loading...</p>
             ) : (
@@ -214,7 +259,7 @@ function App() {
                 {Object.keys(news).length === 0 && !error && (
                   <p className="text-center">No news articles found.</p>
                 )}
-                {Object.entries(news).map(([category, articles]) => (
+                {/* {Object.entries(news).map(([category, articles]) => (
                   (selectedCategory === '' || selectedCategory === category) && (
                     <div key={category}>
                       <h2 className="text-center mb-3">{category.charAt(0).toUpperCase() + category.slice(1)} News</h2>
@@ -233,19 +278,45 @@ function App() {
                             </Card.Text>
                             <Card.Text>{article.description}</Card.Text>
                             <div className="d-flex justify-content-between mb-3">
-                              {/* <Likes count={likes[index] || 0} onLike={() => handleLike(index)} /> */}
-                              {/* <Comments
-                                comments={comments[index] || []}
-                                onComment={(comment) => handleComment(index, comment)}
-                              /> */}
-                              {/* <Save saved={saves[index]} onSave={() => handleSave(index)} /> */}
+
+                          
                             </div>
                           </Card.Body>
                         </Card>
                       ))}
                     </div>
                   )
-                ))}
+                ))} */}
+
+                {selectedCategory ? (
+                  <div>
+                    <h1 className="mb-4">
+                      {selectedCategory.charAt(0).toUpperCase() +
+                        selectedCategory.slice(1)}{" "}
+                      News
+                    </h1>
+                    {news[selectedCategory] &&
+                    news[selectedCategory].length > 0 ? (
+                      <div className="row">
+                        {news[selectedCategory].map((article, index) => (
+                          <React.Fragment key={index}>
+                            {renderNewsCard(article)}
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    ) : (
+                      <p>No articles found for this category.</p>
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    <h1 className="mb-4">Select a Category</h1>
+                    <p>
+                      Please choose a category from the dropdown menu above to
+                      view news articles.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>

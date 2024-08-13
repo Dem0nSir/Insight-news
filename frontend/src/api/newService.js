@@ -70,3 +70,28 @@ export const searchNews = async (searchQuery) => {
     throw error;
   }
 };
+
+export const getSentiment = async (text) => {
+  if (!text) return 'Unknown';
+  
+  try {
+    const response = await fetch(`${API_BASE_URL}/sentiment`, {  
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: text }),
+    });
+
+    // Check if the response is OK (status code 200-299)
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.sentiment; 
+  } catch (error) {
+    console.error('Error fetching sentiment:', error);
+    return 'Unknown';
+  }
+};
