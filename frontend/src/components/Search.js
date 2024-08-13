@@ -234,7 +234,7 @@ const NewsComponent = () => {
   );
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 p-0">
       <h1 className="mb-4">News Search</h1>
       <div className="input-group mb-3">
         <input 

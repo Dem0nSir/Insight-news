@@ -131,6 +131,7 @@ import { Col, Container, Row, Card, Button, Form, Modal } from "react-bootstrap"
 import { fetchNews } from "./api/newService";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/footer";
 import "./App.css";
 import NewsComponent from "./components/Search";
 
@@ -208,20 +209,23 @@ function App() {
   );
 
   return (
+    <>
     <Container fluid className="py-5">
       <Row>
         <Navbar />
         {/* <Col md={2} className="p-0"> */}
           {/* <Sidebar />
         </Col> */}
+        <Container>
+          <Row className="justify-content-center">
         <Col md={9} className="pt-5">
           <div className="feedpage">
             <div className="text-center mb-4 mt-3">
               <h1>Insight News</h1>
             </div>
             <NewsComponent />
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <Button onClick={handleFetchNews} disabled={isLoading}>
+            <div className="d-flex justify-content-start align-items-center mb-4">
+              <Button onClick={handleFetchNews} disabled={isLoading} className="me-3">
                 {isLoading ? (
                   <>
                     <i className="bi bi-arrow-clockwise"></i> Refreshing...
@@ -261,11 +265,11 @@ function App() {
                 )}
                 {selectedCategory ? (
                   <div>
-                    <h1 className="mb-4">
+                    <h2 className="mb-4 mt-4 text-center">
                       {selectedCategory.charAt(0).toUpperCase() +
                         selectedCategory.slice(1)}{" "}
                       News
-                    </h1>
+                    </h2>
                     {news[selectedCategory] &&
                     news[selectedCategory].length > 0 ? (
                       <div className="row">
@@ -281,7 +285,7 @@ function App() {
                   </div>
                 ) : (
                   <div>
-                    <h1 className="mb-4">Select a Category</h1>
+                    <h2 className="mb-4 mt-4">Select a Category</h2>
                     <p>
                       Please choose a category from the dropdown menu above to
                       view news articles.
@@ -292,6 +296,8 @@ function App() {
             )}
           </div>
         </Col>
+        </Row>
+        </Container>
       </Row>
 
       {/* Welcome Popup */}
@@ -309,6 +315,8 @@ function App() {
         </Modal.Footer>
       </Modal>
     </Container>
+    <Footer />
+</>
   );
 }
 
