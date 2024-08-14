@@ -1,6 +1,6 @@
 # Insight
 
-Welcome to the Insight project! This application is being developed using **React**, **Bootstrap**, **Node** and **Firebase**. INsight is designed to provide an automated news delivery experience, bringing the latest news and updates to users in a seamless and efficient manner.
+Welcome to the Insight project! This application is being developed using **React**, **Bootstrap**, **Node** and **Firebase**. Insight is designed to provide an automated news delivery experience, bringing the latest news and updates to users in a seamless and efficient manner.
 
 ## Project Description
 
@@ -9,7 +9,7 @@ Insight aims to revolutionize the way users consume news by leveraging automatio
 - **Real-Time News Updates:** Stay informed with the latest news as it happens, powered by reliable data sources and automated updates.
 - **Personalized Content:** Customize your news feed based on your interests and preferences.
 - **User-Friendly Interface:** Navigate through news categories and articles with ease, thanks to the intuitive design using React and Bootstrap.
-- **Efficient Data Management:** Utilize MySQL for robust data handling, ensuring fast and secure access to news content.
+- **Efficient Data Management:** Utilize firebase for robust data handling, ensuring fast and secure access to news content.
 
 ## Technologies Used
 
