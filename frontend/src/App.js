@@ -127,11 +127,10 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { Col, Container, Row, Card, Button, Form, Modal } from "react-bootstrap"; // Added Modal here
+import { Col, Container, Row, Card, Button, Form, Modal } from "react-bootstrap";
 import { fetchNews } from "./api/newService";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Navbar from "./components/Navbar/Navbar";
-import Footer from "./components/Footer/footer";
 import "./App.css";
 import NewsComponent from "./components/Search";
 
@@ -141,13 +140,14 @@ function App() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
-  const [showWelcomePopup, setShowWelcomePopup] = useState(true); // State to manage popup visibility
+  const [showWelcomePopup, setShowWelcomePopup] = useState(true);
 
-  const handleFetchNews = async () => {
+  const handleFetchNews = async (category = "") => {
     setError("");
     setIsLoading(true);
     try {
-      const data = await fetchNews();
+      const data = await fetchNews(category);
+      console.log("Fetched News Data:", data); // Debugging
       setNews(data);
       setLastUpdated(new Date());
     } catch (error) {
@@ -159,13 +159,27 @@ function App() {
   };
 
   useEffect(() => {
-    handleFetchNews();
+    const queryParams = new URLSearchParams(window.location.search);
+    const categoryFromUrl = queryParams.get("category");
+
+    // Default to "Technology" if no category is found in the URL
+    const defaultCategory = categoryFromUrl || "technology";
+    
+    setSelectedCategory(defaultCategory);
+    handleFetchNews(defaultCategory);
+
+    // Update the URL if no category was originally provided
+    if (!categoryFromUrl) {
+      window.history.pushState({}, "", `/?category=${defaultCategory}`);
+    }
   }, []);
 
   const handleCategoryChange = (event) => {
-    setSelectedCategory(
-      event.target.value === "All categories" ? "" : event.target.value
-    );
+    const selected = event.target.value;
+    setSelectedCategory(selected === "All categories" ? "" : selected);
+    const newUrl = selected ? `/?category=${selected}` : "/";
+    window.history.pushState({}, "", newUrl);
+    handleFetchNews(selected);
   };
 
   const renderNewsCard = (article) => (
@@ -209,23 +223,20 @@ function App() {
   );
 
   return (
-    <>
     <Container fluid className="py-5">
       <Row>
         <Navbar />
-        {/* <Col md={2} className="p-0"> */}
-          {/* <Sidebar />
-        </Col> */}
-        <Container>
-          <Row className="justify-content-center">
+        <Col md={2} className="p-0">
+          <Sidebar />
+        </Col>
         <Col md={9} className="pt-5">
           <div className="feedpage">
             <div className="text-center mb-4 mt-3">
               <h1>Insight News</h1>
             </div>
             <NewsComponent />
-            <div className="d-flex justify-content-start align-items-center mb-4">
-              <Button onClick={handleFetchNews} disabled={isLoading} className="me-3">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <Button onClick={() => handleFetchNews(selectedCategory)} disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <i className="bi bi-arrow-clockwise"></i> Refreshing...
@@ -265,11 +276,11 @@ function App() {
                 )}
                 {selectedCategory ? (
                   <div>
-                    <h2 className="mb-4 mt-4 text-center">
+                    <h1 className="mb-4">
                       {selectedCategory.charAt(0).toUpperCase() +
                         selectedCategory.slice(1)}{" "}
                       News
-                    </h2>
+                    </h1>
                     {news[selectedCategory] &&
                     news[selectedCategory].length > 0 ? (
                       <div className="row">
@@ -285,7 +296,7 @@ function App() {
                   </div>
                 ) : (
                   <div>
-                    <h2 className="mb-4 mt-4">Select a Category</h2>
+                    <h1 className="mb-4">Select a Category</h1>
                     <p>
                       Please choose a category from the dropdown menu above to
                       view news articles.
@@ -296,27 +307,35 @@ function App() {
             )}
           </div>
         </Col>
-        </Row>
-        </Container>
       </Row>
 
-      {/* Welcome Popup */}
-      <Modal show={showWelcomePopup} onHide={() => setShowWelcomePopup(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Welcome to Insight News</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Welcome! Stay informed with the latest news updates. Use the category selector to filter news articles based on your interests.</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={() => setShowWelcomePopup(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+{/* Welcome Popup */}
+<Modal
+  show={showWelcomePopup}
+  onHide={() => setShowWelcomePopup(false)}
+  centered
+  backdrop="static"
+  keyboard={false}
+  dialogClassName="welcome-modal"
+>
+  <Modal.Header  className="border-0 justify-content-center">
+    <Modal.Title className="w-100 text-center">👋 Welcome to Insight News!</Modal.Title>
+  </Modal.Header>
+  <Modal.Body className="text-center p-5">
+    <p className="lead mb-4">Stay ahead with the latest updates. Let’s dive into the world of news!</p>
+    <Button
+      variant="primary"
+      onClick={() => setShowWelcomePopup(false)}
+      className="animate__animated animate__pulse animate__infinite"
+    >
+      Let’s Go!
+    </Button>
+  </Modal.Body>
+</Modal>
+
+
+
     </Container>
-    <Footer />
-</>
   );
 }
 

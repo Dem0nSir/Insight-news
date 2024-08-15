@@ -59,3 +59,47 @@
 body {
   font-family: "Poppins", sans-serif;
 }
+
+.welcome-modal .modal-content {
+  background: linear-gradient(135deg, #e0f7fa, #ffffff);
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.welcome-modal .modal-title {
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #007bff;
+  animation: slideInDown 1s ease-in-out;
+}
+
+.welcome-modal .modal-body {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.welcome-modal .btn-primary {
+  background-color: #007bff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 50px;
+  transition: background-color 0.3s ease;
+}
+
+.welcome-modal .btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Add fun animation using Animate.css or similar library */
+@keyframes slideInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
