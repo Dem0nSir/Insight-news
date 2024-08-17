@@ -224,12 +224,12 @@ function App() {
 
   return (
     <Container fluid className="py-5">
-      <Row>
+      <Row >
         <Navbar />
-        <Col md={2} className="p-0">
+        {/* <Col md={2} className="p-0">
           <Sidebar />
-        </Col>
-        <Col md={9} className="pt-5">
+        </Col> */}
+        <Col md={12} className="pt-5">
           <div className="feedpage">
             <div className="text-center mb-4 mt-3">
               <h1>Insight News</h1>
